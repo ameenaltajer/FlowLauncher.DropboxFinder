@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32407.337
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Launcher.Plugin.DropboxFinder", "Flow.Launcher.Plugin.DropboxFinder\Flow.Launcher.Plugin.DropboxFinder.csproj", "{F3A84638-F15F-4B79-989A-76DD7A3EF171}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F3A84638-F15F-4B79-989A-76DD7A3EF171}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3A84638-F15F-4B79-989A-76DD7A3EF171}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3A84638-F15F-4B79-989A-76DD7A3EF171}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3A84638-F15F-4B79-989A-76DD7A3EF171}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5C5F0658-E0C2-403D-AFED-BE3B70FD3757}
+	EndGlobalSection
+EndGlobal
