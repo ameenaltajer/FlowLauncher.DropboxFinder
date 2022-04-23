@@ -1,0 +1,2 @@
+dotnet publish Flow.Launcher.Plugin.DropboxFinder -c Release -r win-x64
+Compress-Archive -LiteralPath Flow.Launcher.Plugin.DropboxFinder/bin/Release/win-x64/publish -DestinationPath Flow.Launcher.Plugin.DropboxFinder/bin/DropboxFinder.zip -Force

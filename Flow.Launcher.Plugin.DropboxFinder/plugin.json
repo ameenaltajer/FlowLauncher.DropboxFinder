@@ -1,0 +1,12 @@
+{
+    "ID": "5A1E2AA6-1C6A-4130-990E-973FC5795D87",
+    "ActionKeyword": "df",
+    "Name": "DropboxFinder",
+    "Description": "A plugin for Flow Launcher to search files directly within Dropbox.",
+    "Author": "Ameen Altajer",
+    "Version": "1.0.0",
+    "Language": "csharp",
+    "Website": "https://github.com/AmeenAltajer/FlowLauncher.DropboxFinder",
+    "IcoPath": "icon.png",
+    "ExecuteFileName": "Flow.Launcher.Plugin.DropboxFinder.dll"
+}
