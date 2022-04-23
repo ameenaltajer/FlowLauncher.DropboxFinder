@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dropbox.Api;
+using Dropbox.Api.Files;
 using Flow.Launcher.Plugin;
 
 namespace Flow.Launcher.Plugin.DropboxFinder
@@ -20,18 +21,37 @@ namespace Flow.Launcher.Plugin.DropboxFinder
         public List<Result> Query(Query query)
         {
 
-            Task<string> user  = Task.Run((Func<Task<string>>)DropboxManager.Run);
-            
+            if (query.Search == "")
+                return new List<Result>();
 
+            Task<List<SearchMatchV2>> matches = Task.Run(() => DropboxManager.GetRelevantItems(query.Search, 3));
 
-            var result = new Result
+            if (matches != null)
             {
-                Title = "Dropbox User: " + user.Result,
-                SubTitle = $"Query: {query.Search}",
-                IcoPath = "app.png"
-            };
 
-            return new List<Result> { result };
+                var resultList = new List<Result>();
+
+                foreach (SearchMatchV2 match in matches.Result)
+                {
+                    
+
+                    var result = new Result
+                    {
+                        Title = match.Metadata.AsMetadata.Value.Name,
+                        SubTitle = match.Metadata.AsMetadata.Value.PathDisplay,
+                        IcoPath = "app.png"
+                    };
+
+                    resultList.Add(result);
+
+                }
+
+                return resultList;
+                
+            }
+
+            return new List<Result>();
+
         }
 
     }
