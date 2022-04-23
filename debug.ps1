@@ -4,6 +4,9 @@ $FlowLauncherExecutable = "C:\Users\" + $env:USERNAME + "\AppData\Local\FlowLaun
 
 echo $FlowLauncherExecutable
 
+echo "Building the debug package.."
+dotnet publish Flow.Launcher.Plugin.DropboxFinder -c Debug -r win-x64
+
 echo "Killing Flow Launcher.."
 taskkill /im Flow.Launcher.exe /f
 
@@ -16,7 +19,7 @@ Remove-Item  $AllPluginFiles -Recurse
 Start-Sleep -s 1
 
 echo "Copy new plugin folder.."
-Copy-Item -Path "Flow.Launcher.Plugin.DropboxFinder\bin\Debug\*" -Destination $PluginFolder -Recurse
+Copy-Item -Path "Flow.Launcher.Plugin.DropboxFinder\bin\Debug\win-x64\publish\*" -Destination $PluginFolder -Recurse
 
 echo "Copy images to the new plugin folder.."
 Copy-Item -Path "Flow.Launcher.Plugin.DropboxFinder\*.png" -Destination $PluginFolder -Recurse
