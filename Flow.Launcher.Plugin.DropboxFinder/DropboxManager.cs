@@ -14,7 +14,7 @@ namespace Flow.Launcher.Plugin.DropboxFinder
 
         public static async Task<string> GetEmail()
         {
-            using (var dbx = new DropboxClient(File.ReadAllText(@"C:\token.cfg")))
+            using (var dbx = new DropboxClient(DropboxFinder.AccessToken))
             {
                 var full = await dbx.Users.GetCurrentAccountAsync();
                 return full.Email;
@@ -23,7 +23,7 @@ namespace Flow.Launcher.Plugin.DropboxFinder
 
         public static async Task<List<SearchMatchV2>> GetRelevantItems(string item, ulong count)
         {
-            using (var dbx = new DropboxClient(File.ReadAllText(@"C:\token.cfg")))
+            using (var dbx = new DropboxClient(DropboxFinder.AccessToken))
             {
                 var result = await dbx.Files.SearchV2Async(new Dropbox.Api.Files.SearchV2Arg(item, new Dropbox.Api.Files.SearchOptions(null, count)));
 
