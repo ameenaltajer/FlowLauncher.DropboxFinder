@@ -51,6 +51,8 @@ namespace Flow.Launcher.Plugin.DropboxFinder
             RefreshToken = File.ReadAllText(@"C:\test\refreshtoken.cfg");
 
             //Todo: Validate token validity and expiry here and save
+            
+
 
 
         }
@@ -59,7 +61,7 @@ namespace Flow.Launcher.Plugin.DropboxFinder
         {
 
             //Check the token being available
-            if (string.IsNullOrEmpty(AccessToken))
+            if (string.IsNullOrEmpty(RefreshToken))
             {
 
                 return new List<Result>{ new Result {
@@ -79,7 +81,33 @@ namespace Flow.Launcher.Plugin.DropboxFinder
             if (query.Search == "")
                 return new List<Result>();
 
+
             Task<List<SearchMatchV2>> matches = Task.Run(() => DropboxManager.GetRelevantItems(query.Search, 25));
+
+            //Check token validity
+            try
+            {
+
+                matches.Wait();
+
+            }
+            catch (Exception ex)
+            {
+
+                //if (ex.Message.Contains("expired_access_token"))
+
+                return new List<Result>{ new Result {
+
+                    Title = ex.Message,
+                    //SubTitle = "",
+                    //IcoPath = "app.png",
+                    //Action = context => SetupOAuth()
+                    }
+
+                };
+
+            }
+
 
             if (matches.Result.Count != 0)
             {
@@ -171,7 +199,7 @@ namespace Flow.Launcher.Plugin.DropboxFinder
             File.AppendAllText(@"C:\test\DFLog.txt", "UID: " + tokenResult.Result.Uid + Environment.NewLine);
 
             //Keep the token to be used for further sessions
-            File.WriteAllText(@"C:\test\accesstoken.cfg", AccessToken);
+            File.WriteAllText(@"C:\test\refreshtoken.cfg", RefreshToken);
             
             http.Stop();
             
