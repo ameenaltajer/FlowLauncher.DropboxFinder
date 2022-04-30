@@ -24,10 +24,6 @@ Copy-Item -Path "Flow.Launcher.Plugin.DropboxFinder\bin\Debug\win-x64\publish\*"
 echo "Copy images to the new plugin folder.."
 Copy-Item -Path "Flow.Launcher.Plugin.DropboxFinder\*.png" -Destination $PluginFolder -Recurse
 
-echo "Copy token.cfg to the new plugin folder.."
-Copy-Item -Path "Flow.Launcher.Plugin.DropboxFinder\token.cfg" -Destination $PluginFolder -Recurse
-
-
 Start-Sleep -s 1
 
 echo "Rebooting Flow Launcher.."
