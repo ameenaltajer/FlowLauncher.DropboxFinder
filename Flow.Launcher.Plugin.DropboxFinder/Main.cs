@@ -9,22 +9,24 @@ using System.Threading.Tasks;
 using Dropbox.Api;
 using Dropbox.Api.Files;
 using Flow.Launcher.Plugin;
+using System.Windows;
+using System.Windows.Controls;
+using System.Text.Json;
 
 namespace Flow.Launcher.Plugin.DropboxFinder
 {
 
-    public class DropboxFinder : IPlugin
+    /// <summary>
+    /// Main Plugin Class
+    /// </summary>
+    public class DropboxFinder : IPlugin, ISettingProvider
     {
 
 
         /// <summary>
         /// Dropbox snippets to enable PKCE OAuth flow
         /// </summary>
-        
-        // Add an ApiKey (from https://www.dropbox.com/developers/apps) here
-        public static string ApiKey = "";
-        public static string AppName = "";
-        public static string AccessToken = "";
+        public const string AppName = "vayv5p3x303bxax";
         public static string RefreshToken = "";
 
         // This loopback host is for demo purpose. If this port is not
@@ -41,19 +43,42 @@ namespace Flow.Launcher.Plugin.DropboxFinder
 
         private PluginInitContext _context;
 
+        private static Settings settings;
+        
+
         public void Init(PluginInitContext context)
         {
             _context = context;
-
-            //Quick hack to read all the keys from files for now
-            AppName = File.ReadAllText(@"C:\test\appname.cfg");
-            AccessToken = File.ReadAllText(@"C:\test\accesstoken.cfg");
-            RefreshToken = File.ReadAllText(@"C:\test\refreshtoken.cfg");
-
-            //Todo: Validate token validity and expiry here and save
             
+            
+            //Prepare settings
+            var settingsFolderLocation =
+                Path.Combine(
+                    Directory.GetParent(
+                        Directory.GetParent(context.CurrentPluginMetadata.PluginDirectory).FullName)
+                    .FullName,
+                    "Settings", "Plugins", "Flow.Launcher.Plugin.DropboxFinder");
 
+            var settingsFileLocation = Path.Combine(settingsFolderLocation, "Settings.json");
 
+            if (!Directory.Exists(settingsFolderLocation))
+            {
+                Directory.CreateDirectory(settingsFolderLocation);
+
+                settings = new Settings
+                {
+                    SettingsFileLocation = settingsFileLocation
+                };
+
+                settings.Save();
+            }
+            else
+            {
+                settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText(settingsFileLocation));
+                settings.SettingsFileLocation = settingsFileLocation;
+            }
+
+            RefreshToken = settings.OAuthRefreshToken;
 
         }
 
@@ -166,7 +191,7 @@ namespace Flow.Launcher.Plugin.DropboxFinder
             var authorizeUri = OAuthFlow.GetAuthorizeUri(OAuthResponseType.Code, AppName, RedirectUri.ToString(), state: state, tokenAccessType: TokenAccessType.Offline);
 
             //Lousy and quick logging, don't judge :)
-            File.WriteAllText(@"C:\test\DFLog.txt", "URL is " + authorizeUri.ToString() + Environment.NewLine);
+            //File.WriteAllText(@"C:\test\DFLog.txt", "URL is " + authorizeUri.ToString() + Environment.NewLine);
             
             var http = new HttpListener();
             http.Prefixes.Add(LoopbackHost);
@@ -188,19 +213,13 @@ namespace Flow.Launcher.Plugin.DropboxFinder
             var tokenResult = Task.Run(() => OAuthFlow.ProcessCodeFlowAsync(redirectUri, AppName, RedirectUri.ToString(), state));
             tokenResult.Wait();
 
-
-            File.AppendAllText(@"C:\test\DFLog.txt", "Finished Exchanging Code for Token.." + Environment.NewLine);
-
-            AccessToken = tokenResult.Result.AccessToken;
             RefreshToken = tokenResult.Result.RefreshToken;
-            
-            File.AppendAllText(@"C:\test\DFLog.txt", "Access token: " + AccessToken + Environment.NewLine);
-            File.AppendAllText(@"C:\test\DFLog.txt", "Refresh token: " + RefreshToken + Environment.NewLine);
-            File.AppendAllText(@"C:\test\DFLog.txt", "UID: " + tokenResult.Result.Uid + Environment.NewLine);
 
             //Keep the token to be used for further sessions
-            File.WriteAllText(@"C:\test\refreshtoken.cfg", RefreshToken);
-            
+            //File.WriteAllText(@"C:\test\refreshtoken.cfg", RefreshToken);
+            settings.OAuthRefreshToken = RefreshToken;
+            settings.Save();
+
             http.Stop();
             
 
@@ -286,6 +305,11 @@ namespace Flow.Launcher.Plugin.DropboxFinder
             var redirectUri = new Uri(context.Request.QueryString["url_with_fragment"]);
 
             return redirectUri;
+        }
+
+        public Control CreateSettingPanel()
+        {
+            return new DropboxFinderSettings(settings);
         }
 
     }
