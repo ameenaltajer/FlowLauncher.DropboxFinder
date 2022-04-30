@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Flow.Launcher.Plugin;
 using Flow.Launcher.Plugin.DropboxFinder;
+using Microsoft.Win32;
+using System.IO;
 
 namespace Flow.Launcher.Plugin.DropboxFinder
 {
@@ -46,6 +48,18 @@ namespace Flow.Launcher.Plugin.DropboxFinder
             _settings.Save();
             
             
+        }
+
+        private void btnSave2_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (DropboxFolderPath.Text[DropboxFolderPath.Text.Length - 1] == '\\')
+                DropboxFolderPath.Text = DropboxFolderPath.Text.Substring(0, DropboxFolderPath.Text.Length - 1);
+
+            _settings.DropboxFolderPath = DropboxFolderPath.Text;
+            _settings.Save();
+
+
         }
 
     }

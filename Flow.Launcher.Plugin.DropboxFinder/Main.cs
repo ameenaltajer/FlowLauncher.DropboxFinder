@@ -178,7 +178,7 @@ namespace Flow.Launcher.Plugin.DropboxFinder
         /// <returns></returns>
         private bool NavigateToFolder(string subTitle)
         {
-            System.Diagnostics.Process.Start("explorer.exe", @"E:\Dropbox" + subTitle.Replace('/', '\\'));
+            System.Diagnostics.Process.Start("explorer.exe", settings.DropboxFolderPath + subTitle.Replace('/', '\\'));
             return true;
         }
 

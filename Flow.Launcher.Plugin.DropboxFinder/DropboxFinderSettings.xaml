@@ -18,6 +18,12 @@
             <TextBox x:Name="OAuthRefreshKey" Width="264" Height="20"/>
             <Button x:Name="btnSave" Click="btnSave_Click" Content="Save" Margin="30 0 0 0" Height="30" Width="50"/>
         </StackPanel>
+        <Label x:Name="Label2" Content="Dropbox Folder" Margin="25 30 0 0"/>
+        <StackPanel Orientation="Horizontal" Margin="25 10 0 0">
+            <TextBox x:Name="DropboxFolderPath" Width="264" Height="20"/>
+            <Button x:Name="btnSave2" Click="btnSave2_Click" Content="Save" Margin="30 0 0 0" Height="30" Width="50"/>
+        </StackPanel>
+
     </StackPanel>
     
 </UserControl>

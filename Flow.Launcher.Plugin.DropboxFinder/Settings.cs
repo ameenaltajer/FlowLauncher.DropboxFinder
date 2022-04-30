@@ -9,6 +9,7 @@ namespace Flow.Launcher.Plugin.DropboxFinder
         internal string SettingsFileLocation;
 
         public string OAuthRefreshToken { get; set; }
+        public string DropboxFolderPath { get; set; }
 
         internal void Save()
         {
