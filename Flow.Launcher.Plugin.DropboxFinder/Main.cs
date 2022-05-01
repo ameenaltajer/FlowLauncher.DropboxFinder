@@ -12,6 +12,7 @@ using Flow.Launcher.Plugin;
 using System.Windows;
 using System.Windows.Controls;
 using System.Text.Json;
+using System.Threading;
 
 namespace Flow.Launcher.Plugin.DropboxFinder
 {
@@ -44,13 +45,12 @@ namespace Flow.Launcher.Plugin.DropboxFinder
         private PluginInitContext _context;
 
         private static Settings settings;
-        
 
         public void Init(PluginInitContext context)
         {
+
             _context = context;
-            
-            
+
             //Prepare settings
             var settingsFolderLocation =
                 Path.Combine(
@@ -80,7 +80,11 @@ namespace Flow.Launcher.Plugin.DropboxFinder
 
             RefreshToken = settings.OAuthRefreshToken;
 
+          
+
         }
+
+
 
         public List<Result> Query(Query query)
         {
@@ -94,7 +98,12 @@ namespace Flow.Launcher.Plugin.DropboxFinder
                     Title = "API key not setup, click to setup.",
                     //SubTitle = "",
                     //IcoPath = "app.png",
-                    Action = context => SetupOAuth()
+                    Action = context => {
+
+                            Task.Run(SetupOAuth);
+
+                            return true;
+                        }
                     }
 
                 };
@@ -157,7 +166,7 @@ namespace Flow.Launcher.Plugin.DropboxFinder
                 }
 
                 return resultList;
-                
+
             }
 
             return new List<Result>{ new Result {
@@ -182,7 +191,7 @@ namespace Flow.Launcher.Plugin.DropboxFinder
             return true;
         }
 
-        private bool SetupOAuth()
+        private async Task<bool> SetupOAuth()
         {
 
             //OAuth PKCE snippets taken mostly from Dropbox sample code for .NET
@@ -221,7 +230,8 @@ namespace Flow.Launcher.Plugin.DropboxFinder
             settings.Save();
 
             http.Stop();
-            
+
+            MessageBox.Show("Your Dropbox has been connected successfully! You may now close the browser windows.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
             return true;
         }
