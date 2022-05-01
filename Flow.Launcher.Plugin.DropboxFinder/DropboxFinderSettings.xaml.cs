@@ -53,7 +53,7 @@ namespace Flow.Launcher.Plugin.DropboxFinder
         private void btnSave2_Click(object sender, RoutedEventArgs e)
         {
 
-            if (DropboxFolderPath.Text[DropboxFolderPath.Text.Length - 1] == '\\')
+            if (DropboxFolderPath.Text.Length != 0 && DropboxFolderPath.Text[DropboxFolderPath.Text.Length - 1] == '\\')
                 DropboxFolderPath.Text = DropboxFolderPath.Text.Substring(0, DropboxFolderPath.Text.Length - 1);
 
             _settings.DropboxFolderPath = DropboxFolderPath.Text;
