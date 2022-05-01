@@ -157,7 +157,19 @@ namespace Flow.Launcher.Plugin.DropboxFinder
                         Title = match.Metadata.AsMetadata.Value.Name,
                         SubTitle = match.Metadata.AsMetadata.Value.PathDisplay,
                         IcoPath = "app.png",
-                        Action = context => NavigateToFolder(match.Metadata.AsMetadata.Value.PathDisplay)
+                        Action = context => {
+
+                            if (string.IsNullOrEmpty(settings.DropboxFolderPath) || !Directory.Exists(settings.DropboxFolderPath))
+                            {
+                                MessageBox.Show("Please setup a correct path for your Dropbox folder from the Plugin setup menu!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                return true;
+                            }
+                            
+                            NavigateToFolder(match.Metadata.AsMetadata.Value.PathDisplay);
+                            
+                            return true;
+
+                        }
 
                     };
 
@@ -185,10 +197,10 @@ namespace Flow.Launcher.Plugin.DropboxFinder
         /// </summary>
         /// <param name="subTitle"></param>
         /// <returns></returns>
-        private bool NavigateToFolder(string subTitle)
+        private void NavigateToFolder(string subTitle)
         {
             System.Diagnostics.Process.Start("explorer.exe", settings.DropboxFolderPath + subTitle.Replace('/', '\\'));
-            return true;
+            
         }
 
         private async Task<bool> SetupOAuth()
