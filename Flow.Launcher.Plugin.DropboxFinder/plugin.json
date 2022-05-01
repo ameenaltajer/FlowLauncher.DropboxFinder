@@ -4,7 +4,7 @@
     "Name": "DropboxFinder",
     "Description": "A plugin for Flow Launcher to search files directly within Dropbox.",
     "Author": "Ameen Altajer",
-    "Version": "1.0.0",
+    "Version": "1.1.0",
     "Language": "csharp",
     "Website": "https://github.com/AmeenAltajer/FlowLauncher.DropboxFinder",
     "IcoPath": "icon.png",
